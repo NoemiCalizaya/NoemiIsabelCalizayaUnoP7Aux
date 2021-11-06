@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import { useContext } from 'react';
+import Login from './components/Login/Login';
+import NavBar from './components/navigation/NavBar';
+import NewPet from './components/Pet/NewPet';
+import PetsList from './components/Pet/PetsList';
+import authCtx from './components/store/auth-context';
+import "./index.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+export const App = () => {
+    const ctx = useContext(authCtx);
+    const [petsList, setPetsList] = useState([]);
+    const newPetHandler = (petName, ownerName, ownerEmail) => {
+        setPetsList((prevPetsList) => {
+            return [...prevPetsList, 
+                {id: Math.trunc(Math.random() * 100), petName, ownerName, ownerEmail}
+            ];
+        });
+    };
 
-export default App;
+    return (
+        <div className="content">
+            <NavBar />
+            {ctx.isLoggedIn ? (
+                <>
+                    <NewPet onNewPet={newPetHandler}/>
+                    <PetsList pets={petsList}/> 
+                </>
+            ): (
+                <Login />
+            )}
+        </div>
+    );
+};
