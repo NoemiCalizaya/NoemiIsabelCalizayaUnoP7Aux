@@ -9,9 +9,9 @@ import "./index.css";
 
 const App = () => {
     const ctx = useContext(authCtx);
-    const [emailNavBar, setemailNavBar] = useState([]);
+    const [emailNavBar, setEmailNavBar] = useState("");
     const emailN = useCallback((emailV) => {
-        setemailNavBar(emailV);
+        setEmailNavBar(emailV);
     },[]);
     console.log("App");
     return (

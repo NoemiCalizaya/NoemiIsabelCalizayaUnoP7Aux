@@ -12,7 +12,6 @@ const NewPet = (props) => {
     const [showSumary, setShowSumary] = useState(false);
 
     const petNameHandler = (event) => {
-        console.log(event.target);
         setPetName(event.target.value);
         if (petName !== "") 
             setShowSumary(true);

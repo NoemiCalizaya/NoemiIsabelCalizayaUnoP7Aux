@@ -12,8 +12,12 @@ const NavBar = (props) => {
             <section className="links">
                 {/* <a href="#">Home</a>
                 <a href="#">About</a> */}
-                <span><b>Email del Login: </b>{props.email}</span>
                 <Button onClick={ctx.onLogout}>Logout</Button>
+                {ctx.isLoggedIn ? (
+                    <div className= "email"><b>Email del Login: </b>{props.email}</div>
+                ): (
+                    <div className= "email"><b>Email del Login: </b></div>
+                )}
             </section>
         </nav>
     );

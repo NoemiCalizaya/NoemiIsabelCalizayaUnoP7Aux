@@ -11,12 +11,12 @@ h1 {
     color: #f1356d;
 }
 
-span {
-    padding: 30px;
-}
-
 .links {
     margin-left: auto;
+}
+
+.email {
+    margin-top: 8px;
 }
 
 a {
