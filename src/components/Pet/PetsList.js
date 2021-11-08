@@ -1,17 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import PetItem from './PetItem';
 import "./PetsList.css";
+import authCtx from '../store/auth-context';
 
-const PetsList = ({ pets }) => {
+const PetsList = () => {
+    const {state} = useContext(authCtx);
+    console.log("PetsList");
     return (
         <div>
-            {pets.map((pet) => {
-                return (
-                    <div className="blog-preview" key={pet.id}>
-                        <h2>{pet.petName}</h2>
-                        <p>{pet.ownerName}</p>
-                        <p>{pet.ownerEmail}</p>
-                    </div>
-                );
+            {state.map((pet) => {
+                return <PetItem key={pet.id} {...pet}/>
             })}
         </div>
     );

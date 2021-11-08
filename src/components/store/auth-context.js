@@ -1,9 +1,10 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
+import { petsReducer } from "./petsReducer";
 
 const AuthContext = createContext({
     isLoggedIn: false,
     onLogin: (email, password) => {},
-    onLogout: () => {}
+    onLogout: () => {},
 });
 
 export const AuthContextProvider = (props) => {
@@ -27,12 +28,16 @@ export const AuthContextProvider = (props) => {
         setIsLoggedIn(false);
     };
 
+    const [state, dispatch] = useReducer(petsReducer, []);
+
     return (
         <AuthContext.Provider
             value={{
                 isLoggedIn,
                 onLogin: loginHandler,
-                onLogout: logoutHandler
+                onLogout: logoutHandler,
+                state,
+                dispatch
             }}
         >
             {props.children}

@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Card from '../UI/Card';
 import Button from '../UI/Button';
+import authCtx from '../store/auth-context';
 
 const NewPet = (props) => {
-
+    const {dispatch} = useContext(authCtx);
+    console.log("NewPet");
     const [petName, setPetName] = useState("");
     const [ownerName, setOwnerName] = useState("");
     const [ownerEmail, setOwnerEmail] = useState("");
@@ -31,10 +33,17 @@ const NewPet = (props) => {
         else 
             setShowSumary(false);
     };
-
+    const pet = {
+        petName,
+        ownerName,
+        ownerEmail
+    };
     const submitHandler = (event) => {
         event.preventDefault();
-        props.onNewPet(petName, ownerName, ownerEmail);
+        dispatch({
+            type: "ADD_PET",
+            payload: {...pet, id: Math.trunc(Math.random() * 100)}
+        });
         setPetName("");
         setOwnerName("");
         setOwnerEmail("");

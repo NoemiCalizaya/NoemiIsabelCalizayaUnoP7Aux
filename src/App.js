@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useContext } from 'react';
 import Login from './components/Login/Login';
 import NavBar from './components/navigation/NavBar';
@@ -7,28 +7,26 @@ import PetsList from './components/Pet/PetsList';
 import authCtx from './components/store/auth-context';
 import "./index.css";
 
-export const App = () => {
+const App = () => {
     const ctx = useContext(authCtx);
-    const [petsList, setPetsList] = useState([]);
-    const newPetHandler = (petName, ownerName, ownerEmail) => {
-        setPetsList((prevPetsList) => {
-            return [...prevPetsList, 
-                {id: Math.trunc(Math.random() * 100), petName, ownerName, ownerEmail}
-            ];
-        });
-    };
-
+    const [emailNavBar, setemailNavBar] = useState([]);
+    const emailN = useCallback((emailV) => {
+        setemailNavBar(emailV);
+    },[]);
+    console.log("App");
     return (
         <div className="content">
-            <NavBar />
+            <NavBar email={emailNavBar}/>
             {ctx.isLoggedIn ? (
                 <>
-                    <NewPet onNewPet={newPetHandler}/>
-                    <PetsList pets={petsList}/> 
+                    <NewPet />
+                    <PetsList /> 
                 </>
             ): (
-                <Login />
+                <Login emailL={emailN}/>
             )}
         </div>
     );
 };
+
+export default App;

@@ -52,17 +52,20 @@ const Login = (props) => {
         email.value = "";
         setPassword("");
     };
-
+    const emailV = email.value;
+    props.emailL(emailV);
     return (
-        <Card>
-            <form onSubmit={handlerSubmit}>
-                <label>Email</label>
-                <input type="text" onChange={emailChangeHandler}/>
-                <label>Password</label>
-                <input type="password" onChange={passwordChangeHandler}/>
-                <Button>login</Button>
-            </form>
-        </Card>
+        <>
+            <Card>
+                <form onSubmit={handlerSubmit}>
+                    <label>Email</label>
+                    <input type="text" onChange={emailChangeHandler}/>
+                    <label>Password</label>
+                    <input type="password" onChange={passwordChangeHandler}/>
+                    <Button>login</Button>
+                </form>
+            </Card>
+        </>
     );
 };
 
