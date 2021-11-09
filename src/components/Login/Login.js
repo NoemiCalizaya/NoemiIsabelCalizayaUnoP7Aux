@@ -6,34 +6,49 @@ import AuthContext from '../store/auth-context';
 
 
 const emailReducer = (state, action) => {
-    if (action.type === "USER INPUT") {
+    if (action.type === "EMAIL_INPUT") {
         return {
-            value: action.val
+            value: action.vale
         };
     }
     if (action.type === "ONBLUR_EMAIL") {
         if (/^[a-zA-Z0-9_.+-]+@(gmail|hotmail|yahoo)+\.com$/.test(action.vale)) {
             return {
-                isValid: "Correcto"
+                value: action.vale,
+                isValidEmail: "Correcto"
             };
         }
         else {
             return {
-                isValid: "Incorrecto"
+                isValidEmail: `El email debe contener el carácter @ 
+                y solamente los dominios de gmail.com, hotmail.com y 
+                yahoo.com`
             };
         };
     }
 };
 
 const passwordReducer = (state, action) => {
-    if (action.type === "PASSWORD") {
+    if (action.type === "PASSWORD_INPUT") {
         return {
             value: action.valp
         };
     }
-    return {
-        value: ""
-    };
+    if (action.type === "ONBLUR_PASSWORD") {
+        if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/.test(action.valp)) {
+            return {
+                value: action.valp,
+                isValidPassword: "Correcto"
+            };
+        }
+        else {
+            return {
+                isValidPassword: `El password debe contener como mínimo 8 caracteres y como máximo 15.
+                Debe contener al menos un número, una letra mayúscula y un caracter especial.
+                No debe contener espacios`,
+            };
+        };
+    }
 };
 
 const Login = (props) => {
@@ -41,20 +56,21 @@ const Login = (props) => {
 
     /* const [email, setEmail] = useState(""); */
     const [email, dispatchEmail] = useReducer(emailReducer, {
-        value: ""
+        value: "",
+        isValidEmail: null
     });
     /* const [password, setPassword] = useState(""); */
     const [password, dispatchPassword] = useReducer(passwordReducer, {
         value: "",
-        isValid: ""
+        isValidPassword: null
     });
 
     const emailChangeHandler = useCallback((e) => {
         /* console.log(e.target.value);
         setEmail(e.target.value); */
         dispatchEmail({
-            val: e.target.value,
-            type: "USER INPUT"
+            vale: e.target.value,
+            type: "EMAIL_INPUT"
         });
     }, []);
 
@@ -69,31 +85,41 @@ const Login = (props) => {
         /* setPassword(e.target.value); */
         dispatchPassword({
             valp: e.target.value,
-            type: "PASSWORD"
+            type: "PASSWORD_INPUT"
         });
     }, []);
 
+    const onblurPassword = (e) => {
+        dispatchPassword({
+            valp: e.target.value,
+            type: "ONBLUR_PASSWORD"
+        });
+    }
+
     const handlerSubmit = (e) => {
         e.preventDefault();
-        if (email.isValid === "Correcto") {
-            ctx.onLogin(email.value, password.value);
+        if (email.isValidEmail === "Correcto" && password.isValidPassword === "Correcto") {
+            ctx.onLogin(email, password);
             const emailV = email.value;
             props.emailL(emailV);
         }
-        else 
-            console.log("credenciales incorrectas");
+        else {
+            console.log("email invalido o password invalido");
+        }
         email.value = "";
         password.value= "";
     };
+
     return (
         <>
             <Card>
                 <form onSubmit={handlerSubmit}>
                     <label>Email</label>
                     <input type="text" onChange={emailChangeHandler} onBlur={onblurEmail}/>
-                    {email.isValid}
+                    <div>{email.isValidEmail}</div>
                     <label>Password</label>
-                    <input type="password" onChange={passwordChangeHandler}/>
+                    <input type="password" onChange={passwordChangeHandler} onBlur={onblurPassword}/>
+                    <div>{password.isValidPassword}</div>
                     <Button>login</Button>
                 </form>
             </Card>
